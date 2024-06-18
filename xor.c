@@ -35,7 +35,7 @@ int main(void)
 {
     srand(time(0));
 
-    float *td = nand;
+    float *td = xor;
     
     size_t stride = 3;
     size_t n = 4;
@@ -75,10 +75,8 @@ int main(void)
             MAT_AT(NN_INPUT(nn), 0, 0) = i;
             MAT_AT(NN_INPUT(nn), 0, 1) = j;
             nn_forward(nn);
-            printf("%zu ^ %zu = %f\n", i, j, MAT_AT(NN_OUTPUT(nn), 0, 0));
-            
+            printf("%zu ^ %zu = %f\n", i, j, MAT_AT(NN_OUTPUT(nn), 0, 0));       
         }
-    }
-    
+    }    
     return 0;
 }

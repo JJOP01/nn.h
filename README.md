@@ -18,21 +18,32 @@ You provide this untrained model, along with its behavioural description, to a l
 
 ### What is this repo so far?
 
-So far, we can compute matrix multiplicaitons. Each "node" in a layer initialises with some randomised value (0 to 1) and through each forward pass a weight is applied to some inputs and a bias which are added at each "node". This happens at each layer until eventually an output is observed. For each pass, there exists a "finite difference" between this observed output and a target output (set by the user). This finite difference calculates the loss gradient at every node when a `eps` value is subtracted from it. A Neural Network wide gradient is computed then a learning rate is applied to this loss gradient which is then applied to the set of weights. This substitutes for backpropagation. 
+So far, we can compute matrix multiplicaitons. In each forward pass an initial input matrix is passed through the first layer of weights, where it is multiplied by the first weight matrix. The result of the dot product and a bias are summed and an activation function (sigmoid) is applied to these net inputs. This initalises each node in the first layer as the output of the activation function, the output of this node is passed to the next layer. This happens at each layer until eventually an output is observed. For each pass, there exists a "finite difference" between this observed output and a target output (set by the user). This finite difference calculates the loss gradient of the node with it's net inputs minus the loss of these net inputs minus a subtracted epsilon. A network-wide gradient is computed and a learning rate is applied to this loss gradient which then adjusts the weights at each layer. This substitutes for backpropagation. 
 
+The most important things to understand before you can utilise this framework:
+- A continuous array of floats `TrainingData` are what the `Mat` format is applied to
 ```
 float TrainingData[] {...};
-Mat X = {...};
-Mat y = {...};
+```
+- The `Mat` format:
+```
+typedef struct {
+    size_t rows;
+    size_t cols;
+    size_t stride;
+    float *es;
+} Mat;
+```
+- An array where every index represents a layer (input-1st-output) and every index element denotes the number of nodes in this layer
+```
 size_t arch[] = {2, 2, 1};
 ```
-
-The most important parts to understand before you can utilise this framework.
-- A continuous array of floats `TrainingData`
-- A submatrix of `TrainingData` called `X` for features
-- A submatrix of `TrainingData` called `y` for targets
-- An array which represents the Neural Networks architecture {INPUT, *HIDDEN_LAYER(S), OUTPUT}
 
 ### TODO
 
 - implement back-propagation
+- implement multi-threading (late-game) 
+
+#### REFERENCES:
+- https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#um-unified-memory-programming-hd
+- Kirk, D. B., & Hwu, W.-m. W. (2022). Programming massively parallel processors: A hands-on approach (4th ed.). Morgan Kaufmann.
