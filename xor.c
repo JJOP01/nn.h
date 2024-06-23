@@ -30,14 +30,12 @@ float nand[] = {
     1, 1, 0,
 };
 
-
 int main(void)
 {
     // srand(time(0));
     srand(69);
 
-    float *td = and;
-    
+    float *td = xor;
     size_t stride = 3;
     size_t n = 4;
     Mat ti = {
@@ -59,19 +57,18 @@ int main(void)
     NN g  = nn_alloc(arch, ARRAY_LEN(arch));
     nn_rand(nn, 0, 1);
 
-    float rate = 1e-1;
+    float rate = 1;
     
     printf("cost = %f\n", nn_cost(nn, ti, to));
-    for (size_t i = 0; i < 1; i++) {
-#if 1
+    for (size_t i = 0; i < 5000; i++) {
+#if 0
         float eps = 1e-1;
         nn_finite_diff(nn, g, eps, ti, to);
 #else
         nn_backprop(nn, g, ti, to);
 #endif            
-        NN_PRINT(g);
-        // nn_learn(nn, g, rate);
-        // `printf("%zu: cost = %f\n", i, nn_cost(nn, ti, to));
+        nn_learn(nn, g, rate);
+        printf("%zu: cost = %f\n", i, nn_cost(nn, ti, to));
     }
     
     for (size_t i = 0; i < 2; i ++) {

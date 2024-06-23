@@ -299,7 +299,7 @@ void nn_backprop(NN nn, NN g, Mat ti, Mat to)
                     // k - weight matrix row 
                     float pa = MAT_AT(nn.as[l-1], 0, k);
                     float w = MAT_AT(nn.ws[l-1], k, j);
-                    MAT_AT(g.ws[l-1], k, j) += 2*a*a*(1-a)*pa;
+                    MAT_AT(g.ws[l-1], k, j) += 2*da*a*(1-a)*pa;
                     MAT_AT(g.as[l-1], 0, k) += 2*da*a*(1-a)*w;
                 }
             }
